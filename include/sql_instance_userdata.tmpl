@@ -12,11 +12,11 @@ $primary_gw=$primary_ip_octet[0]+"."+$primary_ip_octet[1]+"."+$primary_ip_octet[
 $vpc_network=(($vpc_cidr).split("/"))[0]
 
 
-route add $cluster_network MASK 255.255.255.240 $cluster_gw
+#route add $cluster_network MASK 255.255.255.240 $cluster_gw
 
-route add $vpc_network MASK 255.255.0.0 $primary_gw
+#route add $vpc_network MASK 255.255.0.0 $primary_gw
 
-route change 0.0.0.0 mask 0.0.0.0 $primary_gw metric 5
+#route change 0.0.0.0 mask 0.0.0.0 $primary_gw metric 5
 
 Install-WindowsFeature failover-clustering -IncludeManagementTools
 
