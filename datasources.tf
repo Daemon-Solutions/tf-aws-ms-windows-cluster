@@ -13,8 +13,8 @@ data "template_file" "sql1_instance_userdata" {
   template = "${file("${path.module}/include/sql_instance_userdata.tmpl")}"
 
   vars {
-    drives          = "${element(var.disk_letter,0)},${element(var.disk_letter,1)},${element(var.disk_letter,2)},${element(var.disk_letter,3)}"
-    names           = "${element(var.disk_names,0)},${element(var.disk_names,1)},${element(var.disk_names,2)},${element(var.disk_names,3)}"
+    drives          = "${join(",", var.disk_letter)}"
+    names           = "${join(",", var.disk_names)}"
     vpc_cidr        = "${var.vpc_cidr}"
     cluster_cidr    = "${var.windows_cluster_cidr}"
     hostname        = "${element(var.hostname, 0)}"
@@ -31,8 +31,8 @@ data "template_file" "sql2_instance_userdata" {
   template = "${file("${path.module}/include/sql_instance_userdata.tmpl")}"
 
   vars {
-    drives          = "${element(var.disk_letter,0)},${element(var.disk_letter,1)},${element(var.disk_letter,2)},${element(var.disk_letter,3)}"
-    names           = "${element(var.disk_names,0)},${element(var.disk_names,1)},${element(var.disk_names,2)},${element(var.disk_names,3)}"
+    drives          = "${join(",", var.disk_letter)}"
+    names           = "${join(",", var.disk_names)}"
     vpc_cidr        = "${var.vpc_cidr}"
     cluster_cidr    = "${var.windows_cluster_cidr}"
     hostname        = "${element(var.hostname, 1)}"

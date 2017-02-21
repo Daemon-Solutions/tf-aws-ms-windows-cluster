@@ -4,7 +4,7 @@ resource "aws_instance" "sql1" {
   instance_type          = "m3.large"
   user_data              = "<powershell>${data.template_file.sql1_instance_userdata.rendered}</powershell><persist>true</persist>"
   iam_instance_profile   = "${module.iam_instance_profile_ms_sql_pull.profile_id}"
-  vpc_security_group_ids = ["${aws_security_group.ms_sql.id}", "${var.ads_sg}", "${var.mgmt_internal_sg_id}"]
+  vpc_security_group_ids = ["${aws_security_group.ms_sql.id}", "${var.ads_sg}", "${var.mgmt_internal_sg_id}", "${aws_security_group.ms_cluster.id}"]
   key_name               = "${var.key_name}"
   private_ip             = "${element(var.sql_1_private_ip, 0)}"
 
@@ -21,7 +21,7 @@ resource "aws_ebs_volume" "sql_disks1" {
   type              = "gp2"
 
   tags {
-    Name = "${element(var.disk_names, count.index)}"
+    Name = "${var.customer}-${var.sql_cluster_id}1-${element(var.disk_names, count.index)}"
   }
 }
 
@@ -39,7 +39,7 @@ resource "aws_instance" "sql2" {
   instance_type          = "m3.large"
   user_data              = "<powershell>${data.template_file.sql2_instance_userdata.rendered}</powershell><persist>true</persist>"
   iam_instance_profile   = "${module.iam_instance_profile_ms_sql_pull.profile_id}"
-  vpc_security_group_ids = ["${aws_security_group.ms_sql.id}", "${var.ads_sg}"]
+  vpc_security_group_ids = ["${aws_security_group.ms_sql.id}", "${var.ads_sg}", "${var.mgmt_internal_sg_id}", "${aws_security_group.ms_cluster.id}"]
   key_name               = "${var.key_name}"
   private_ip             = "${element(var.sql_2_private_ip, 0)}"
 
@@ -55,7 +55,7 @@ resource "aws_ebs_volume" "sql_disks2" {
   type              = "gp2"
 
   tags {
-    Name = "${element(var.disk_names, count.index)}"
+    Name = "${var.customer}-${var.sql_cluster_id}2-${element(var.disk_names, count.index)}"
   }
 }
 
