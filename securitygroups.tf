@@ -145,3 +145,57 @@ resource "aws_security_group_rule" "cluster_dynamic_egress_udp" {
   self              = "true"
   security_group_id = "${aws_security_group.ms_cluster.id}"
 }
+
+resource "aws_security_group_rule" "cluster_cluster137_egress_udp" {
+  type              = "egress"
+  protocol          = "udp"
+  from_port         = "137"
+  to_port           = "137"
+  self              = "true"
+  security_group_id = "${aws_security_group.ms_cluster.id}"
+}
+
+resource "aws_security_group_rule" "cluster_cluster135_egress_udp" {
+  type              = "egress"
+  protocol          = "tcp"
+  from_port         = "135"
+  to_port           = "135"
+  self              = "true"
+  security_group_id = "${aws_security_group.ms_cluster.id}"
+}
+
+resource "aws_security_group_rule" "cluster_cluster137_ingress_udp" {
+  type              = "ingress"
+  protocol          = "udp"
+  from_port         = "137"
+  to_port           = "137"
+  self              = "true"
+  security_group_id = "${aws_security_group.ms_cluster.id}"
+}
+
+resource "aws_security_group_rule" "cluster_cluster135_ingress_udp" {
+  type              = "ingress"
+  protocol          = "tcp"
+  from_port         = "135"
+  to_port           = "135"
+  self              = "true"
+  security_group_id = "${aws_security_group.ms_cluster.id}"
+}
+
+resource "aws_security_group_rule" "cluster_icmp_ingress_udp" {
+  type              = "ingress"
+  protocol          = "icmp"
+  from_port         = "-1"
+  to_port           = "-1"
+  self              = "true"
+  security_group_id = "${aws_security_group.ms_cluster.id}"
+}
+
+resource "aws_security_group_rule" "cluster_icmp_egress_udp" {
+  type              = "egress"
+  protocol          = "icmp"
+  from_port         = "-1"
+  to_port           = "-1"
+  self              = "true"
+  security_group_id = "${aws_security_group.ms_cluster.id}"
+}
