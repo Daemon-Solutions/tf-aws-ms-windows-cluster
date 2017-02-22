@@ -40,7 +40,7 @@ variable "windows_ver" {}
 
 ## Security group variabes
 
-#variable "ads_sg" {}
+variable "ads_sg_id" {}
 variable "rdgw_external_sg_id" {}
 
 #variable "mgmt_internal_sg_id" {}
