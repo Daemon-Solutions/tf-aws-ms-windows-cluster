@@ -67,28 +67,28 @@ variable "disk_mappings" {
   default = ["xvdb", "xvdc", "xvdd", "xvde", "xvdf", "xvdg", "xvdh", "xvdi", "xvdj", "xvdk", "xvdl", "xvdm", "xvdn", "xvdo", "xvdp", "xvdq", "xvdr", "xvds", "xvdt", "xvdu", "xvdv", "xvdw", "xvdx", "xvdy", "xvdz"]
 }
 
-## SQL Cluster Variables
+## Windows Cluster Variables
 
 variable "private_subnets_cidrs" {
   type = "list"
 }
 
-variable "sql_cluster_azs" {}
-variable "sql_cluster_id" {}
+variable "windows_cluster_azs" {}
+variable "windows_cluster_id" {}
 
-variable "sql_1_private_ip" {
+variable "windows_cluster_ips" {
   type = "list"
 }
 
-variable "sql_2_private_ip" {
-  type = "list"
-}
-
-variable "windows_cluster_cidr" {}
+variable "windows_cluster_ip" {}
 
 variable "hostname" {
   default = ["clu1", "clu2"]
 }
+
+variable "windows_cluster_quorum_ip" {}
+
+variable "windows_cluster_quorum_share" {}
 
 ## Windows/AD variables
 

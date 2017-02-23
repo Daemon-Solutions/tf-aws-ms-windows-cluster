@@ -10,37 +10,43 @@ data "aws_ami" "windows" {
 }
 
 data "template_file" "sql1_instance_userdata" {
-  template = "${file("${path.module}/include/sql_instance_userdata.tmpl")}"
+  template = "${file("${path.module}/include/cluster_instance_userdata.tmpl")}"
 
   vars {
-    drives          = "${join(",", var.disk_letter)}"
-    names           = "${join(",", var.disk_names)}"
-    vpc_cidr        = "${var.vpc_cidr}"
-    cluster_cidr    = "${var.windows_cluster_cidr}"
-    hostname        = "${element(var.hostname, 0)}"
-    domain_name     = "${var.domain_name}"
-    ad_user         = "${var.ad_user}"
-    domain_password = "${var.domain_password}"
-    local_password  = "${var.local_password}"
-    region          = "${var.aws_region}"
-    dns_servers     = "${element(var.ads_dns,0)},${element(var.ads_dns,1)}"
+    drives                       = "${join(",", var.disk_letter)}"
+    names                        = "${join(",", var.disk_names)}"
+    vpc_cidr                     = "${var.vpc_cidr}"
+    hostname                     = "${var.windows_cluster_id}-1"
+    domain_name                  = "${var.domain_name}"
+    ad_user                      = "${var.ad_user}"
+    domain_password              = "${var.domain_password}"
+    local_password               = "${var.local_password}"
+    region                       = "${var.aws_region}"
+    dns_servers                  = "${element(var.ads_dns,0)},${element(var.ads_dns,1)}"
+    windows_cluster_ip           = "${var.windows_cluster_ip}"
+    windows_cluster_quorum_ip    = "${var.windows_cluster_quorum_ip}"
+    windows_cluster_quorum_share = "${var.windows_cluster_quorum_share}"
+    windows_cluster_id           = "${var.windows_cluster_id}"
   }
 }
 
 data "template_file" "sql2_instance_userdata" {
-  template = "${file("${path.module}/include/sql_instance_userdata.tmpl")}"
+  template = "${file("${path.module}/include/cluster_instance_userdata.tmpl")}"
 
   vars {
-    drives          = "${join(",", var.disk_letter)}"
-    names           = "${join(",", var.disk_names)}"
-    vpc_cidr        = "${var.vpc_cidr}"
-    cluster_cidr    = "${var.windows_cluster_cidr}"
-    hostname        = "${element(var.hostname, 1)}"
-    domain_name     = "${var.domain_name}"
-    ad_user         = "${var.ad_user}"
-    domain_password = "${var.domain_password}"
-    local_password  = "${var.local_password}"
-    region          = "${var.aws_region}"
-    dns_servers     = "${element(var.ads_dns,0)},${element(var.ads_dns,1)}"
+    drives                       = "${join(",", var.disk_letter)}"
+    names                        = "${join(",", var.disk_names)}"
+    vpc_cidr                     = "${var.vpc_cidr}"
+    hostname                     = "${var.windows_cluster_id}-2"
+    domain_name                  = "${var.domain_name}"
+    ad_user                      = "${var.ad_user}"
+    domain_password              = "${var.domain_password}"
+    local_password               = "${var.local_password}"
+    region                       = "${var.aws_region}"
+    dns_servers                  = "${element(var.ads_dns,0)},${element(var.ads_dns,1)}"
+    windows_cluster_ip           = "${var.windows_cluster_ip}"
+    windows_cluster_quorum_ip    = "${var.windows_cluster_quorum_ip}"
+    windows_cluster_quorum_share = "${var.windows_cluster_quorum_share}"
+    windows_cluster_id           = "${var.windows_cluster_id}"
   }
 }
