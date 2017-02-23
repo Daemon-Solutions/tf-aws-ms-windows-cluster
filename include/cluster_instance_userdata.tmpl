@@ -1,0 +1,94 @@
+netsh advfirewall set allprofiles state off
+Install-WindowsFeature failover-clustering -IncludeManagementTools
+
+$quorum_share="${windows_cluster_quorum_share}"
+$quorum_ip="${windows_cluster_quorum_ip}"
+$cluster_ip="${windows_cluster_ip}"
+$cluster_id="${windows_cluster_id}"
+
+$command="new-cluster -name cluster-$cluster_id -node $cluster_id"+"-1,$cluster_id"+"-2 -staticaddress $cluster_ip
+Set-ClusterQuorum -NodeAndFileShareMajority \\$quorum_ip\$quorum_share"
+
+New-Item c:\useres\iand\create_cluster.ps1 -type file  -force -value $command
+
+$non_boot_disks=(get-disk | Where-Object {$_.Number -ne 0}).Number
+$non_boot_partitions=(Get-Partition -DiskNumber $non_boot_disks -ErrorAction SilentlyContinue | where-object {$_.DriveLetter -ne "z"}).DriveLetter
+
+foreach($non_boot_partition in $non_boot_partitions){
+
+$drive_root=$non_boot_partition+":\"
+
+if((gci $drive_root -force | Where-Object {$_.name -ne '$RECYCLE.BIN'}).count -eq 0){
+
+Remove-Partition -DriveLetter $non_boot_partition -confirm:$false
+}
+}
+
+$drives="${drives}"
+$names="${names}"
+
+New-Item c:\drives.txt -type file  -force -value $drives
+New-Item c:\names.txt -type file  -force -value $names
+
+
+cls
+
+$letters=(Get-Content -Path C:\drives.txt) -split ','
+
+$labels=(Get-Content -Path C:\names.txt) -split ','
+
+for($i=1; $i -le $labels.count; $i++){
+
+$drive_letter=$letters[$i-1] + ":"
+
+  if ((test-path "$drive_letter") -eq $false)
+
+{
+
+Initialize-Disk -PartitionStyle MBR -PassThru -Number $i
+
+New-Partition  -DriveLetter $letters[$i-1] -UseMaximumSize -DiskNumber $i
+
+Format-Volume -FileSystem NTFS -NewFileSystemLabel $labels[$i-1] -Confirm:$false -DriveLetter $letters[$i-1]
+
+
+}
+}
+
+
+
+
+
+function ConnectToDomain() {
+	$domain = (Get-WmiObject -Class Win32_ComputerSystem).Domain
+	$newDomain = "${domain_name}"
+	$ad_user = "${ad_user}"
+	$newDomainPassword = '${domain_password}' # single quotes because password can contain dollar sign
+	if ( ([string]::Compare($newDomain, $domain, $True) -ne 0) ) {
+	  $connect = (Get-WmiObject -Class Win32_ComputerSystem).JoinDomainOrWorkGroup($newDomain,$newDomainPassword,"$ad_user@$newDomain",$null,3).ReturnValue
+	  if ($connect -eq 0 ) {
+			Restart-Computer
+			Start-Sleep -s 30
+	  }
+	}
+}
+
+net user administrator ${local_password}
+
+$newName = "${hostname}"
+if ( ([string]::Compare($newName, $env:computerName, $True) -ne 0) ) {
+	$rename = (Get-WmiObject -Class Win32_ComputerSystem).Rename($newName,"${local_password}",'Administrator').ReturnValue
+  if ($rename -eq 0) {
+    Restart-Computer
+    Start-Sleep -s 30
+  }
+
+	} else {
+
+	Set-DefaultAWSRegion -Region "${region}"
+  start-sleep -s 30
+	Import-Module NetAdapter
+	$alias = (Get-NetAdapter).Name
+	Set-DnsClientServerAddress -InterfaceAlias $alias -ServerAddress "${dns_servers}"
+	ConnectToDomain
+}
