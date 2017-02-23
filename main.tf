@@ -1,15 +1,15 @@
 resource "aws_instance" "sql1" {
   ami                    = "${data.aws_ami.windows.id}"
-  subnet_id              = "${element(var.private_subnets, var.sql_cluster_azs)}"
+  subnet_id              = "${element(var.private_subnets, var.windows_cluster_azs)}"
   instance_type          = "m3.large"
   user_data              = "<powershell>${data.template_file.sql1_instance_userdata.rendered}</powershell><persist>true</persist>"
   iam_instance_profile   = "${module.iam_instance_profile_ms_sql_pull.profile_id}"
   vpc_security_group_ids = ["${var.security_group_ids}", "${aws_security_group.ms_cluster.id}"]
   key_name               = "${var.key_name}"
-  private_ip             = "${element(var.sql_1_private_ip, 0)}"
+  private_ip             = "${element(var.windows_cluster_ips, 0)}"
 
   tags {
-    Name = "${var.customer}-${var.envname}_ms-sql-${var.sql_cluster_id}1"
+    Name = "${var.customer}-${var.envname}_ms-sql-${var.windows_cluster_id}1"
   }
 }
 
@@ -21,7 +21,7 @@ resource "aws_ebs_volume" "sql_disks1" {
   type              = "gp2"
 
   tags {
-    Name = "${var.customer}-${var.sql_cluster_id}1-${element(var.disk_names, count.index)}"
+    Name = "${var.customer}-${var.windows_cluster_id}1-${element(var.disk_names, count.index)}"
   }
 }
 
@@ -35,16 +35,16 @@ resource "aws_volume_attachment" "ebs_att1" {
 
 resource "aws_instance" "sql2" {
   ami                    = "${data.aws_ami.windows.id}"
-  subnet_id              = "${element(var.private_subnets, var.sql_cluster_azs)}"
+  subnet_id              = "${element(var.private_subnets, var.windows_cluster_azs)}"
   instance_type          = "m3.large"
   user_data              = "<powershell>${data.template_file.sql2_instance_userdata.rendered}</powershell><persist>true</persist>"
   iam_instance_profile   = "${module.iam_instance_profile_ms_sql_pull.profile_id}"
   vpc_security_group_ids = ["${var.security_group_ids}", "${aws_security_group.ms_cluster.id}"]
   key_name               = "${var.key_name}"
-  private_ip             = "${element(var.sql_2_private_ip, 0)}"
+  private_ip             = "${element(var.windows_cluster_ips, 1)}"
 
   tags {
-    Name = "${var.customer}-${var.envname}_ms-sql-${var.sql_cluster_id}2"
+    Name = "${var.customer}-${var.envname}_ms-sql-${var.windows_cluster_id}2"
   }
 }
 
@@ -55,7 +55,7 @@ resource "aws_ebs_volume" "sql_disks2" {
   type              = "gp2"
 
   tags {
-    Name = "${var.customer}-${var.sql_cluster_id}2-${element(var.disk_names, count.index)}"
+    Name = "${var.customer}-${var.windows_cluster_id}2-${element(var.disk_names, count.index)}"
   }
 }
 
