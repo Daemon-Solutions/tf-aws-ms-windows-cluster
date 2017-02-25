@@ -2,7 +2,7 @@ resource "aws_instance" "sql1" {
   ami                    = "${data.aws_ami.windows.id}"
   subnet_id              = "${element(var.private_subnets, var.windows_cluster_azs)}"
   instance_type          = "m3.large"
-  user_data              = "<powershell>${data.template_file.sql1_instance_userdata.rendered}</powershell><persist>true</persist>"
+  user_data              = "<powershell>${data.template_file.sql1_instance_userdata.rendered}${var.userdata}</powershell><persist>true</persist>"
   iam_instance_profile   = "${module.iam_instance_profile_ms_sql_pull.profile_id}"
   vpc_security_group_ids = ["${var.security_group_ids}", "${aws_security_group.ms_cluster.id}"]
   key_name               = "${var.key_name}"
@@ -37,7 +37,7 @@ resource "aws_instance" "sql2" {
   ami                    = "${data.aws_ami.windows.id}"
   subnet_id              = "${element(var.private_subnets, var.windows_cluster_azs)}"
   instance_type          = "m3.large"
-  user_data              = "<powershell>${data.template_file.sql2_instance_userdata.rendered}</powershell><persist>true</persist>"
+  user_data              = "<powershell>${data.template_file.sql2_instance_userdata.rendered}${var.userdata}</powershell><persist>true</persist>"
   iam_instance_profile   = "${module.iam_instance_profile_ms_sql_pull.profile_id}"
   vpc_security_group_ids = ["${var.security_group_ids}", "${aws_security_group.ms_cluster.id}"]
   key_name               = "${var.key_name}"
