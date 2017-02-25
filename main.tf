@@ -1,12 +1,13 @@
 resource "aws_instance" "sql1" {
   ami                    = "${data.aws_ami.windows.id}"
   subnet_id              = "${element(var.private_subnets, var.windows_cluster_azs)}"
-  instance_type          = "m3.large"
+  instance_type          = "m4.large"
   user_data              = "<powershell>${data.template_file.sql1_instance_userdata.rendered}${var.userdata}</powershell><persist>true</persist>"
   iam_instance_profile   = "${module.iam_instance_profile_ms_sql_pull.profile_id}"
   vpc_security_group_ids = ["${var.security_group_ids}", "${aws_security_group.ms_cluster.id}"]
   key_name               = "${var.key_name}"
   private_ip             = "${element(var.windows_cluster_ips, 0)}"
+  placement_group        = "${aws_placement_group.cluster.id}"
 
   tags {
     Name = "${var.customer}-${var.envname}_ms-sql-${var.windows_cluster_id}1"
@@ -36,12 +37,13 @@ resource "aws_volume_attachment" "ebs_att1" {
 resource "aws_instance" "sql2" {
   ami                    = "${data.aws_ami.windows.id}"
   subnet_id              = "${element(var.private_subnets, var.windows_cluster_azs)}"
-  instance_type          = "m3.large"
+  instance_type          = "m4.large"
   user_data              = "<powershell>${data.template_file.sql2_instance_userdata.rendered}${var.userdata}</powershell><persist>true</persist>"
   iam_instance_profile   = "${module.iam_instance_profile_ms_sql_pull.profile_id}"
   vpc_security_group_ids = ["${var.security_group_ids}", "${aws_security_group.ms_cluster.id}"]
   key_name               = "${var.key_name}"
   private_ip             = "${element(var.windows_cluster_ips, 1)}"
+  placement_group        = "${aws_placement_group.cluster.id}"
 
   tags {
     Name = "${var.customer}-${var.envname}_ms-sql-${var.windows_cluster_id}2"
