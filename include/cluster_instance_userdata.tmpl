@@ -34,8 +34,7 @@ function WindowsCluster() {
 	$command="new-cluster -name cluster-$cluster_id -node $cluster_id"+"-1,$cluster_id"+"-2 -staticaddress $cluster_ip
 	Set-ClusterQuorum -NodeAndFileShareMajority \\$quorum_ip\$quorum_share"
 	New-Item c:\create_cluster.ps1 -type file  -force -value $command
-	$filename=([guid]::NewGuid()).Guid + ".clu"
-    New-Item\\$quorum_ip\$quorum_share\$filename -type file  -force -value $env:computername
+
 }
 
 function PrepWindows() {
@@ -119,5 +118,3 @@ if ( ([string]::Compare($newName, $env:computerName, $True) -ne 0) ) {
 }
 
 WindowsCluster
-
-
