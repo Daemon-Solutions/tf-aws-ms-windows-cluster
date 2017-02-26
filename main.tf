@@ -46,7 +46,10 @@ resource "aws_instance" "sql2" {
   placement_group        = "${aws_placement_group.cluster.id}"
 
   tags {
-    Name = "${var.customer}-${var.envname}_ms-sql-${var.windows_cluster_id}2"
+    Name     = "${var.customer}-${var.envname}_ms-sql-${var.windows_cluster_id}2"
+    customer = "${var.customer}"
+    envname  = "${var.envname}"
+    envtype  = "${var.envtype}"
   }
 }
 
@@ -57,7 +60,10 @@ resource "aws_ebs_volume" "sql_disks2" {
   type              = "gp2"
 
   tags {
-    Name = "${var.customer}-${var.windows_cluster_id}2-${element(var.disk_names, count.index)}"
+    Name     = "${var.customer}-${var.windows_cluster_id}2-${element(var.disk_names, count.index)}"
+    customer = "${var.customer}"
+    envname  = "${var.envname}"
+    envtype  = "${var.envtype}"
   }
 }
 

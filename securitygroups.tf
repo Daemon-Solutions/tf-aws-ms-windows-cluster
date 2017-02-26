@@ -1,8 +1,14 @@
 ## Internal Security Group
 resource "aws_security_group" "ms_sql" {
-  name        = "${var.customer}-${var.envname}-ms-sql"
+  name        = "${var.customer}-${var.envname}-ms-sql-${var.windows_cluster_id}"
   vpc_id      = "${var.vpc_id}"
   description = "ms sql security group"
+
+  tags {
+    customer = "${var.customer}"
+    envname  = "${var.envname}"
+    envtype  = "${var.envtype}"
+  }
 }
 
 resource "aws_security_group_rule" "rdp" {
@@ -33,9 +39,15 @@ resource "aws_security_group_rule" "sql_ingress" {
 }
 
 resource "aws_security_group" "ms_cluster" {
-  name        = "${var.customer}-${var.envname}-ms-cluster"
+  name        = "${var.customer}-${var.envname}-ms-cluster-${var.windows_cluster_id}"
   vpc_id      = "${var.vpc_id}"
   description = "ms cluster security group"
+
+  tags {
+    customer = "${var.customer}"
+    envname  = "${var.envname}"
+    envtype  = "${var.envtype}"
+  }
 }
 
 resource "aws_security_group_rule" "cluster_egress_all" {
