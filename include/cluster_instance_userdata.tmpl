@@ -31,7 +31,7 @@ function WindowsCluster() {
 	$quorum_ip="${windows_cluster_quorum_ip}"
 	$cluster_ip="${windows_cluster_ip}"
 	$cluster_id="${windows_cluster_id}"
-	$command="new-cluster -name cluster-$cluster_id -node $cluster_id"+"-1,$cluster_id"+"-2 -staticaddress $cluster_ip
+	$command="new-cluster -name clu-$cluster_id -node $cluster_id"+"-1,$cluster_id"+"-2 -staticaddress $cluster_ip
 	Set-ClusterQuorum -NodeAndFileShareMajority \\$quorum_ip\$quorum_share"
 	New-Item c:\create_cluster.ps1 -type file  -force -value $command
 
