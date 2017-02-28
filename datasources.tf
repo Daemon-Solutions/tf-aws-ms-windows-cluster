@@ -1,14 +1,5 @@
 #retrieve the latest ami for 2008R2/2012R2/2016
 
-data "aws_ami" "windows" {
-  most_recent = true
-
-  filter {
-    name   = "name"
-    values = ["${lookup(var.windows_ami_names,var.windows_ver)}"]
-  }
-}
-
 data "template_file" "sql1_instance_userdata" {
   template = "${file("${path.module}/include/cluster_instance_userdata.tmpl")}"
 

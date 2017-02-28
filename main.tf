@@ -1,5 +1,5 @@
 resource "aws_instance" "sql1" {
-  ami                    = "${data.aws_ami.windows.id}"
+  ami                    = "${var.windows_ami}"
   subnet_id              = "${element(var.private_subnets, var.windows_cluster_azs)}"
   instance_type          = "m4.large"
   user_data              = "<powershell>${data.template_file.sql1_instance_userdata.rendered}${var.userdata}</powershell><persist>true</persist>"
@@ -35,7 +35,7 @@ resource "aws_volume_attachment" "ebs_att1" {
 }
 
 resource "aws_instance" "sql2" {
-  ami                    = "${data.aws_ami.windows.id}"
+  ami                    = "${var.windows_ami}"
   subnet_id              = "${element(var.private_subnets, var.windows_cluster_azs)}"
   instance_type          = "m4.large"
   user_data              = "<powershell>${data.template_file.sql2_instance_userdata.rendered}${var.userdata}</powershell><persist>true</persist>"

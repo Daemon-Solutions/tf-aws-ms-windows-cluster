@@ -28,15 +28,7 @@ variable "userdata" {
 
 ## Launch Configuration Variables & ami lookup
 
-variable "windows_ami_names" {
-  default = {
-    "2008" = "Windows_Server-2008-R2_SP1-English-64Bit-Base-*"
-    "2012" = "Windows_Server-2012-R2_RTM-English-64Bit-Base-*"
-    "2016" = "Windows_Server-2016-English-Full-Base*"
-  }
-}
-
-variable "windows_ver" {}
+variable "windows_ami" {}
 
 ## Security group variabes
 
